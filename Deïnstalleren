@@ -1,0 +1,59 @@
+import os
+import shutil
+
+def vraag_opties():
+    print("=== De-installatie Wizard ===")
+    print("Wat wil je verwijderen?")
+    print("1. Programma bestanden")
+    print("2. Configuratie instellingen")
+    print("3. Database bestanden")
+    print("4. Logs")
+    print("5. Alles")
+    keuze = input("Maak je keuze (1-5): ")
+    return keuze
+
+def verwijder_pad(pad, omschrijving):
+    if os.path.exists(pad):
+        try:
+            if os.path.isfile(pad):
+                os.remove(pad)
+            else:
+                shutil.rmtree(pad)
+            print(f"[OK] {omschrijving} verwijderd: {pad}")
+        except Exception as e:
+            print(f"[FOUT] Kon {omschrijving} niet verwijderen: {e}")
+    else:
+        print(f"[INFO] {omschrijving} niet gevonden: {pad}")
+
+def deinstalleer():
+    keuze = vraag_opties()
+
+    # Stel mappen/bestanden in
+    programma_map = "C:/MijnSoftware"
+    config_map = os.path.expanduser("~/.mijnsoftware_config")
+    database_map = "C:/MijnSoftware/data"
+    log_map = "C:/MijnSoftware/logs"
+
+    if keuze == "1":
+        verwijder_pad(programma_map, "Programma bestanden")
+    elif keuze == "2":
+        verwijder_pad(config_map, "Configuratie")
+    elif keuze == "3":
+        verwijder_pad(database_map, "Database")
+    elif keuze == "4":
+        verwijder_pad(log_map, "Logs")
+    elif keuze == "5":
+        for pad, omschrijving in [
+            (programma_map, "Programma bestanden"),
+            (config_map, "Configuratie"),
+            (database_map, "Database"),
+            (log_map, "Logs"),
+        ]:
+            verwijder_pad(pad, omschrijving)
+    else:
+        print("Ongeldige keuze!")
+
+    print("\nDe-installatie is afgerond.")
+
+if __name__ == "__main__":
+    deinstalleer()
